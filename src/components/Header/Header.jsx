@@ -5,7 +5,6 @@ import { useIsView } from 'hooks/useIsView.hook';
 
 import Dropdown, { DropdownItem } from 'components/basic-components/Dropdown/Dropdown';
 import { useAuth } from 'contexts/useAuth/Auth.context';
-import ThemeToggleButton from 'theme/themeToggle';
 
 const Header = forwardRef((props, ref) => {
   const { isMobile } = useIsView();
@@ -48,5 +47,3 @@ const Header = forwardRef((props, ref) => {
 });
 
 export default Header;
-
-// change the above header component to allow forwarding of ref

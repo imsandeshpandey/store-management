@@ -1,4 +1,5 @@
-import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { forwardRef, useCallback, useRef } from 'react';
 import { Box, Button, Input, Textarea, Typography } from '@mui/joy';
 import Flex from 'components/basic-components/Flex';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -18,7 +19,6 @@ const inputStyles = {
   },
 };
 const OrderForm = ({ onCancel }) => {
-  const [inputValue, setInputValue] = useState('');
   const widths = [3.2, 1.5, 2, 2.2];
   const getWidth = (index) => (widths[index] / widths.reduce((a, b) => a + b, 0)) * 100 + '%';
 
@@ -54,7 +54,7 @@ const OrderForm = ({ onCancel }) => {
   });
 
   const onSubmit = (data) => {
-    console.log(data); // You can perform your desired actions with the form data here
+    console.log(data);
   };
 
   const calculateTotalAmount = useCallback(() => {

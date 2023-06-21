@@ -1,15 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-// auth provider that will wrap our application and provide the auth context to any component that needs it and has sign in with google and sign out methods too using firebase auth
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useApp } from 'contexts/AppState.context.jsx';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import Flex from 'components/basic-components/Flex';
 import { CircularProgress } from '@mui/joy';
 import { auth, db } from '../../firebase/firebase.config';
-import { doc, getDoc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
-import { set } from 'react-hook-form';
-
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);

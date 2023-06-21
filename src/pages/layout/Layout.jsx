@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Box, CircularProgress, Sheet, Typography } from '@mui/joy';
 import Flex from 'components/basic-components/Flex';
 import ThemeToggleButton from 'theme/themeToggle';
@@ -11,7 +12,6 @@ import { useApp } from 'contexts/AppState.context';
 import { SIDEBAR_COLLAPSED_WIDTH, SIDEBAR_EXPANDED_WIDTH } from 'constants/sidebar.constants';
 import addAlpha from 'utils/addAlpha';
 import OrderModal from '../CreateOrder/CreateOrder.modal';
-import ROUTES from 'router/routes.constants';
 
 const Layout = () => {
   const headerRef = useRef();
@@ -123,5 +123,3 @@ const Container = (props) => (
 );
 
 export default Layout;
-
-// get the height of the header component using ref

@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Layout from 'pages/layout/Layout';
-import { lazy, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import ROUTES from './routes.constants';
 import Orders from 'pages/Orders/Orders';
@@ -25,16 +26,6 @@ const Router = () => {
       return naivgate(ROUTES.LOGIN.ROOT);
     }
   }, [user, pathname]);
-
-  // if (user && user.access && pathname === ROUTES.LOGIN.ROOT) {
-  //   return <Navigate replace to={ROUTES.ORDERS.ROOT} />;
-  // }
-  // if (user && !user.access && pathname !== ROUTES.LOGIN.ROOT) {
-  //   return <Navigate replace to={ROUTES.LOGIN.ROOT} />;
-  // }
-  // if (!user && pathname !== ROUTES.LOGIN.ROOT) {
-  //   return <Navigate replace to={ROUTES.LOGIN.ROOT} />;
-  // }
 
   return (
     <Routes>

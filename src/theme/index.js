@@ -1,5 +1,4 @@
 import { extendTheme } from '@mui/joy/styles';
-import { responsiveFontSizes } from '@mui/material';
 //INFO: Use HSL to easily change colors in the future
 
 let theme = extendTheme({

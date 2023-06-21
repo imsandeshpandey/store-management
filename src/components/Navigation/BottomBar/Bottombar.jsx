@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Flex from 'components/basic-components/Flex';
 import addAlpha from 'utils/addAlpha';
 import React, { useMemo } from 'react';
@@ -11,7 +12,6 @@ import {
 import { ListItemDecorator, Tab, TabList, Tabs, Typography, useColorScheme } from '@mui/joy';
 import ThemeToggleButton from 'theme/themeToggle';
 import Dropdown, { DropdownItem } from 'components/basic-components/Dropdown/Dropdown';
-import { darkModeAtom } from 'contexts/AppState.context';
 
 const Bottombar = ({ page, setPage, onClickOrder }) => {
   const menuItems = useMemo(

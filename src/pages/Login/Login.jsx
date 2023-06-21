@@ -2,7 +2,6 @@ import Flex from 'components/basic-components/Flex';
 import { useAuth } from 'contexts/useAuth/Auth.context';
 import { Alert, Avatar, Box, Button, Typography } from '@mui/joy';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 import { Logout, Warning } from '@mui/icons-material';
 import Logo from 'assets/logos/logo';
 import { useApp } from 'contexts/AppState.context';
