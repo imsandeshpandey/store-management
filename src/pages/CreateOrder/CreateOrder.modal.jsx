@@ -18,7 +18,8 @@ const OrderModal = ({ open, setOpen }) => {
       }}>
       <Sheet
         variant="outlined"
-        sx={{
+        sx={(theme) => ({
+          background: theme.gradient.neutral,
           boxSizing: 'border-box',
           overflow: 'auto',
           ...(!isMobile
@@ -34,7 +35,7 @@ const OrderModal = ({ open, setOpen }) => {
 
                 height: '100%',
               }),
-        }}>
+        })}>
         <OrderForm onCancel={() => setOpen(false)} />
       </Sheet>
     </Modal>

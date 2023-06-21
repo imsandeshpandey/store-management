@@ -135,12 +135,16 @@ const OrderForm = ({ onCancel }) => {
     <Box component="form" height="100%" onSubmit={handleSubmit(onSubmit)}>
       <Flex column jc={['space-between', 'start']} height="100%">
         <Flex
-          bgcolor="background.surface"
           px={['15px', '24px']}
           py={['10px', '15px']}
           ref={printRef}
           component="form"
           width="100%"
+          sx={{
+            '& .MuiInput-root, & .MuiTextarea-root': {
+              bgcolor: 'transparent',
+            },
+          }}
           column>
           <Flex aiCenter mb="20px" jc="space-between">
             <Flex aiCenter flex={1} color="background.level3" maxWidth="50%">
