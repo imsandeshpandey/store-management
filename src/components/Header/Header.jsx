@@ -22,7 +22,7 @@ const Header = forwardRef((props, ref) => {
               <Typography level="h2" fontSize={[12, 20]} fontWeight={500}>
                 {user?.displayName}
               </Typography>
-              <Typography level="body4" fontSize={[8, 10]} fontWeight={500}>
+              <Typography level="body4" fontSize={[8, 12]} fontWeight={500}>
                 {user?.email.split('@')[0]}
               </Typography>
             </Flex>

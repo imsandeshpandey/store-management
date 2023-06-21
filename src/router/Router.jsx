@@ -20,7 +20,7 @@ const Router = () => {
     }
     if (user && !user.access) {
       setLoginError('You are not authorized to use this system.');
-      !pathname === ROUTES.LOGIN.ROOT && naivgate(ROUTES.LOGIN.ROOT);
+      naivgate(ROUTES.LOGIN.ROOT);
     }
     if (!user && pathname !== ROUTES.LOGIN.ROOT) {
       return naivgate(ROUTES.LOGIN.ROOT);
@@ -31,10 +31,11 @@ const Router = () => {
     <Routes>
       <Route path={ROUTES.ROOT} element={<Navigate replace to={ROUTES.ORDERS.ROOT} />} />
       <Route path={ROUTES.LOGIN.ROOT} element={<LoginPage />} />
-      <Route element={<Layout />}>
-        <Route path={ROUTES.ORDERS.ROOT} element={<Orders />} />
-        <Route path={ROUTES.CREATE_ORDER.ROOT} element={<div>create-order</div>} />
-      </Route>
+      {user?.access && (
+        <Route element={<Layout />}>
+          <Route path={ROUTES.ORDERS.ROOT} element={<Orders />} />
+        </Route>
+      )}
     </Routes>
   );
 };
