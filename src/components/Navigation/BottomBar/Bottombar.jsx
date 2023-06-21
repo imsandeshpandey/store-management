@@ -6,7 +6,7 @@ import {
   ShoppingCartTwoTone as OrdersIcon,
   PeopleTwoTone as CustomersIcon,
   StoreMallDirectoryTwoTone as StoreIcon,
-  AddCircleTwoTone as CreateOrderIcon,
+  AddCircle as CreateOrderIcon,
   Menu as MenuIcon,
 } from '@mui/icons-material';
 import { ListItemDecorator, Tab, TabList, Tabs, Typography, useColorScheme } from '@mui/joy';
@@ -50,8 +50,8 @@ const Bottombar = ({ page, setPage, onClickOrder }) => {
       sx={(theme) => ({
         bgcolor:
           mode === 'light'
-            ? addAlpha(theme.palette.neutral[100], 0.2)
-            : addAlpha(theme.palette.neutral[900], 0.2),
+            ? addAlpha(theme.palette.neutral[100], 0.5)
+            : addAlpha(theme.palette.neutral[900], 0.5),
         backdropFilter: 'blur(10px)',
       })}
       // borderRadius="md"
