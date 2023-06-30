@@ -1,5 +1,5 @@
 import { auth, db } from 'firebase-local';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
 const updateUser = async (data) => {
   const user = auth.currentUser;
@@ -18,12 +18,6 @@ const getUserData = async () => {
   if (!user) return null;
   const res = await doc(db, 'users', user.uid);
   return res.data();
-};
-
-const createOrder = async (data) => {
-  const user = auth.currentUser;
-  if (!user) return;
-  const orderRef = collection(db, 'orders');
 };
 
 export { updateUser, getUserData };
