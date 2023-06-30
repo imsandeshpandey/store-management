@@ -43,5 +43,5 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--joy-palette-primary-500);
+  background: linear-gradient(45deg, var(--joy-palette-primary-600), var(--joy-palette-primary-400));
 }

@@ -1,10 +1,10 @@
 import Flex from 'components/basic-components/Flex';
-import { useAuth } from 'contexts/useAuth/Auth.context';
+import { useAuth } from 'contexts';
 import { Alert, Avatar, Box, Button, Typography } from '@mui/joy';
 import React from 'react';
 import { Logout, Warning } from '@mui/icons-material';
-import Logo from 'assets/logos/logo';
-import { useApp } from 'contexts/AppState.context';
+import { Logo } from 'assets/logos';
+import { useApp } from 'contexts';
 
 const LoginPage = () => {
   const { signInWithGoogle, user, signOut } = useAuth();

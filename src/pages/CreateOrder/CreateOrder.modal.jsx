@@ -1,9 +1,9 @@
 import { Modal, Sheet } from '@mui/joy';
 import OrderForm from './Order.form';
-import { useIsView } from 'hooks/useIsView.hook';
+import { useResponsive } from 'hooks/useResponsive';
 
-const OrderModal = ({ open, setOpen }) => {
-  const { isMobile } = useIsView();
+const OrderModal = ({ open, setOpen, initialData, isEdit = false }) => {
+  const { isMobile } = useResponsive();
   return (
     <Modal
       layout="fullscreen"
@@ -17,7 +17,7 @@ const OrderModal = ({ open, setOpen }) => {
         alignItems: 'center',
       }}>
       <Sheet
-        variant="outlined"
+        variant={isMobile ? 'plain' : 'outlined'}
         sx={(theme) => ({
           background: theme.gradient.neutral,
           boxSizing: 'border-box',
@@ -36,7 +36,7 @@ const OrderModal = ({ open, setOpen }) => {
                 height: '100%',
               }),
         })}>
-        <OrderForm onCancel={() => setOpen(false)} />
+        <OrderForm onCancel={() => setOpen(false)} initialData={initialData} isEdit={isEdit} />
       </Sheet>
     </Modal>
   );

@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import Flex from 'components/basic-components/Flex';
-import { useApp } from 'contexts/AppState.context';
 import {
   CallTwoTone as ContactIcon,
   ShoppingCartTwoTone as OrdersIcon,
@@ -11,8 +10,8 @@ import {
   AddCircleTwoTone as CreateOrderIcon,
 } from '@mui/icons-material';
 import { Box, Button, ListItemDecorator, Tab, TabList, Tabs, Typography, useColorScheme } from '@mui/joy';
-import { useIsView } from 'hooks/useIsView.hook';
-import Logo from 'assets/logos/logo';
+import { Logo } from 'assets/logos';
+import { useApp } from 'contexts';
 
 const menuItems = [
   {
@@ -29,18 +28,10 @@ const menuItems = [
   },
 ];
 const Sidebar = ({ page, setPage, onClickOrder }) => {
-  const { isMobile } = useIsView();
   const { mode } = useColorScheme();
   const { sidebarExpanded, toggleSidebar } = useApp();
 
   const renderMenuItem = (label, icon, isActive, key) => {
-    const styles = !isActive
-      ? {
-          color: 'text.primary',
-        }
-      : {
-          bgcolor: 'background.surface',
-        };
     return (
       <Tab
         key={key}
@@ -54,12 +45,16 @@ const Sidebar = ({ page, setPage, onClickOrder }) => {
           ':hover': {
             bgcolor: 'background.level1',
           },
-          ...styles,
+          ...(!isActive
+            ? {
+                color: 'text.primary',
+              }
+            : {
+                bgcolor: 'background.surface',
+              }),
         }}
-        {...(isActive && {
-          variant: 'plain',
-          color: 'primary',
-        })}>
+        variant={isActive && 'plain'}
+        color={isActive && 'primary'}>
         <ListItemDecorator sx={{ mx: !sidebarExpanded && 'auto' }}>{icon}</ListItemDecorator>
         <Typography level="body1" display={!sidebarExpanded && 'none'}>
           {label}
@@ -81,7 +76,7 @@ const Sidebar = ({ page, setPage, onClickOrder }) => {
       boxShadow="md"
       sx={(theme) => ({
         backgroundImage: theme.gradient.neutral,
-        transition: 'width 0.3s ease-in-out',
+        transition: 'width 0.3s',
       })}>
       <Box py="24px">
         <Flex position="fixed" mb="15vh" mt="4px" center={!sidebarExpanded} pl="26px">

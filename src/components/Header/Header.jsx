@@ -1,20 +1,24 @@
 import { Avatar, Typography } from '@mui/joy';
 import React, { forwardRef } from 'react';
 import Flex from 'components/basic-components/Flex';
-import { useIsView } from 'hooks/useIsView.hook';
 
 import Dropdown, { DropdownItem } from 'components/basic-components/Dropdown/Dropdown';
-import { useAuth } from 'contexts/useAuth/Auth.context';
+import { useAuth } from 'contexts/AuthContext';
+import { Logo } from 'assets/logos';
+import { useResponsive } from 'hooks';
 
 const Header = forwardRef((props, ref) => {
-  const { isMobile } = useIsView();
+  const { isMobile } = useResponsive();
   const { signOut, user } = useAuth();
 
   return (
     <Flex ref={ref} aiCenter jc="space-between" py="24px" right={0} {...props}>
-      <Typography level={isMobile ? 'body1' : 'h5'} fontFamily="product sans">
-        Shiva and Sapana Traders
-      </Typography>
+      <Flex column ai="start" gap="2px">
+        {isMobile && <Logo fullLogo height="20px" />}
+        <Typography level={isMobile ? 'body3' : 'h5'} fontFamily="product sans">
+          Shiva and Sapana Traders
+        </Typography>
+      </Flex>
       <Dropdown
         label={
           <Flex aiCenter sx={{ cursor: 'pointer', gap: ['6px', '8px'] }}>

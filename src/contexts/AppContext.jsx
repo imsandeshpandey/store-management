@@ -1,4 +1,5 @@
-import { useIsView } from 'hooks/useIsView.hook';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useResponsive } from 'hooks/useResponsive';
 import { useColorScheme } from '@mui/joy';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
@@ -7,9 +8,8 @@ const AppContext = createContext();
 const useApp = () => useContext(AppContext);
 
 const AppProvider = ({ children }) => {
-  const { isTablet } = useIsView();
+  const { isTablet } = useResponsive();
   const { mode, setMode } = useColorScheme();
-
   const [appState, setAppState] = useState({
     userAgent: /Android|iPhone/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
     appLoading: true,
@@ -30,11 +30,12 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     setAppState((prevState) => ({
       ...prevState,
-      sidebarExpanded: !prevState.sidebarExpanded,
+      sidebarExpanded: !isTablet,
     }));
   }, [isTablet]);
 
   //helper functions
+
   const setAppLoading = (loading) => {
     setAppState((prevState) => ({
       ...prevState,

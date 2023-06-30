@@ -5,7 +5,7 @@ import logoDark from './logo-dark.svg';
 import logoDarkIcon from './logo-icon-dark.svg';
 import { Box, useColorScheme } from '@mui/joy';
 
-const Logo = ({ fullLogo, ...props }) => {
+export const Logo = ({ fullLogo, ...props }) => {
   const { mode } = useColorScheme();
 
   if (fullLogo) {
@@ -14,5 +14,3 @@ const Logo = ({ fullLogo, ...props }) => {
     return <Box component="img" src={mode === 'light' ? logoIcon : logoDarkIcon} {...props} />;
   }
 };
-
-export default Logo;

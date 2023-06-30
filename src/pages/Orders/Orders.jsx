@@ -1,36 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Flex from 'components/basic-components/Flex';
-import { Grid, Typography } from '@mui/joy';
+import { Grid } from '@mui/joy';
 import React from 'react';
 import Bill from './Bill/Bill';
-import { useIsView } from 'hooks/useIsView.hook';
+import PageTitle from 'components/basic-components/PageTitle';
 
 const Orders = () => {
-  const { isMobile } = useIsView();
+  const orders = [];
   return (
     <Flex column>
-      <Typography level={isMobile ? 'h2' : 'h1'}>Orders</Typography>
-      <Grid container spacing="16px" sx={{ overflow: 'auto', pb: '30px', mt: '30px' }}>
-        <Grid xs={12} md={6} lg={4} xl={3}>
-          <Bill />
-        </Grid>
-        <Grid xs={12} md={6} lg={4} xl={3}>
-          <Bill />
-        </Grid>
-        <Grid xs={12} md={6} lg={4} xl={3}>
-          <Bill />
-        </Grid>
-        <Grid xs={12} md={6} lg={4} xl={3}>
-          <Bill />
-        </Grid>
-        <Grid xs={12} md={6} lg={4} xl={3}>
-          <Bill />
-        </Grid>
-        <Grid xs={12} md={6} lg={4} xl={3}>
-          <Bill />
-        </Grid>
-        <Grid xs={12} md={6} lg={4} xl={3}>
-          <Bill />
-        </Grid>
+      <PageTitle>Orders</PageTitle>
+      <Grid container spacing="16px" sx={{ overflow: 'auto', pb: ['70px', '20px'], flexGrow: 1 }}>
+        {orders?.map((order) => (
+          <Grid key={order?.id} xs={12} md={6} xl={4}>
+            <Bill data={order} />
+          </Grid>
+        ))}
       </Grid>
     </Flex>
   );

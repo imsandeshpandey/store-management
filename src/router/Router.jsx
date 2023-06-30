@@ -5,25 +5,30 @@ import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-
 import ROUTES from './routes.constants';
 import Orders from 'pages/Orders/Orders';
 import LoginPage from 'pages/Login/Login';
-import { useAuth } from 'contexts/useAuth/Auth.context';
-import { useApp } from 'contexts/AppState.context';
+import { useAuth } from 'contexts/AuthContext';
+import { useApp } from 'contexts/AppContext';
+import Customers from 'pages/Customers/Customers';
 
 const Router = () => {
   const { pathname } = useLocation();
   const { user } = useAuth();
   const { setLoginError } = useApp();
-
   const naivgate = useNavigate();
+  const { state } = useLocation();
   useEffect(() => {
     if (user && user.access && pathname === ROUTES.LOGIN.ROOT) {
-      naivgate(ROUTES.ORDERS.ROOT);
+      naivgate(state?.from || ROUTES.ORDERS.ROOT);
     }
     if (user && !user.access) {
       setLoginError('You are not authorized to use this system.');
       naivgate(ROUTES.LOGIN.ROOT);
     }
     if (!user && pathname !== ROUTES.LOGIN.ROOT) {
-      return naivgate(ROUTES.LOGIN.ROOT);
+      return naivgate(ROUTES.LOGIN.ROOT, {
+        state: {
+          from: pathname,
+        },
+      });
     }
   }, [user, pathname]);
 
@@ -34,6 +39,8 @@ const Router = () => {
       {user?.access && (
         <Route element={<Layout />}>
           <Route path={ROUTES.ORDERS.ROOT} element={<Orders />} />
+          <Route path={ROUTES.CUSTOMERS.ROOT} element={<Customers />} />
+          <Route path={ROUTES.MY_STORE.ROOT} element={<Customers />} />
         </Route>
       )}
     </Routes>

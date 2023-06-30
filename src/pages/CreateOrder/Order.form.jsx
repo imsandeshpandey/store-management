@@ -1,12 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { forwardRef, useCallback, useRef } from 'react';
-import { Box, Button, Input, Textarea, Typography } from '@mui/joy';
+import { forwardRef, useCallback, useRef, useState } from 'react';
+import { Box, Button, CircularProgress, Input, Textarea, Typography } from '@mui/joy';
 import Flex from 'components/basic-components/Flex';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { Add, Print, Remove } from '@mui/icons-material';
+import { Add, Close, Print, Remove } from '@mui/icons-material';
 import { useReactToPrint } from 'react-to-print';
 import { AddSlashesToDate, currencyToNumber, toCurrency } from 'utils/string';
 import { nonNaN } from 'utils/numbers';
+import NepaliDate from 'nepali-date';
+import createOrder from './createOrderFunc';
+import OrderTypeChip from 'components/basic-components/OrderTypeChip';
 
 const inputStyles = {
   color: 'text.primary',
@@ -15,10 +18,13 @@ const inputStyles = {
   px: 0,
   py: '0px',
   '& .MuiInputBase-root': {
+    border: '1px solid red',
     py: '0px',
   },
+  '& .MuiInput-input': { textAlign: 'inherit' },
 };
-const OrderForm = ({ onCancel }) => {
+const OrderForm = ({ onCancel, isEdit = false, initialData = null }) => {
+  const [loading, setLoading] = useState(false);
   const widths = [3.2, 1.5, 2, 2.2];
   const getWidth = (index) => (widths[index] / widths.reduce((a, b) => a + b, 0)) * 100 + '%';
 
@@ -31,12 +37,12 @@ const OrderForm = ({ onCancel }) => {
     name: '',
     amount: '',
   };
-  const DEFAULT_FORM = {
+  const DEFAULT_FORM = initialData || {
     type: 'B',
     orderNumber: '',
-    date: '',
+    date: new NepaliDate().format('YYYY/MM/DD'),
     name: '',
-    number: '',
+    phoneNumber: '',
     address: '',
     items: [DEFAULT_ITEM],
     totalAmount: 0,
@@ -53,8 +59,11 @@ const OrderForm = ({ onCancel }) => {
     name: 'items',
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    setLoading(true);
+    await createOrder(data, isEdit);
+    setLoading(false);
+    onCancel();
   };
 
   const calculateTotalAmount = useCallback(() => {
@@ -155,9 +164,8 @@ const OrderForm = ({ onCancel }) => {
                 variant="plain"
                 sx={{
                   ...inputStyles,
-                  maxWidth: '100px',
                   color: 'inherit',
-                  fontSize: ['xl3', 'xl4'],
+                  fontSize: ['xl2', 'xl4'],
                   fontFamily: 'product sans',
                   fontWeight: 600,
                 }}
@@ -165,28 +173,36 @@ const OrderForm = ({ onCancel }) => {
                 placeholder=""
               />
             </Flex>
-
-            <Controller
-              name="date"
-              control={control}
-              render={({ field: { onChange, value, ref } }) => (
-                <Input
-                  variant="plain"
-                  sx={{
-                    maxWidth: '170px',
-                    fontFamily: 'product sans',
-                    fontWeight: 600,
-                    fontSize: 'xl2',
-                    ...inputStyles,
-                  }}
-                  ref={ref}
-                  value={value}
-                  onChange={(e) => onChange(AddSlashesToDate(e.target.value))}
-                  placeholder="DD/MM/YYYY"
-                  type="text"
-                />
-              )}
-            />
+            <Flex center gap="8px">
+              <Controller
+                name="date"
+                control={control}
+                render={({ field: { onChange, value, ref } }) => (
+                  <Input
+                    variant="plain"
+                    sx={{
+                      maxWidth: '170px',
+                      fontFamily: 'product sans',
+                      fontWeight: 600,
+                      fontSize: ['xl', 'xl2'],
+                      textAlign: 'right',
+                      ...inputStyles,
+                    }}
+                    ref={ref}
+                    value={value}
+                    onBlur={(e) => {
+                      const val = e.target.value;
+                      if (val.length === 9) {
+                        onChange(`${val.slice(0, 8)}0${val.slice(8)}`);
+                      }
+                    }}
+                    onChange={(e) => onChange(AddSlashesToDate(e.target.value))}
+                    placeholder="YYYY/MM/DD"
+                    type="text"
+                  />
+                )}
+              />
+            </Flex>
           </Flex>
           <Input
             variant="plain"
@@ -208,7 +224,7 @@ const OrderForm = ({ onCancel }) => {
               fontSize: 'md',
               ...inputStyles,
             }}
-            {...register('number')}
+            {...register('phoneNumber')}
             placeholder="Phone number"
             type="text"
           />
@@ -289,7 +305,7 @@ const OrderForm = ({ onCancel }) => {
                       sx={{
                         textAlign: 'left',
                       }}
-                      placeholder="Qty"
+                      placeholder="0"
                       maxWidth={getWidth(1)}
                       name={`items[${index}].qty`}
                       onChange={(e) => {
@@ -407,31 +423,28 @@ const OrderForm = ({ onCancel }) => {
             </Flex>
           </Flex>
         </Flex>
-        <Flex jc="space-between" pb={['10px', '15px']} px={['15px', '24px']}>
+        <Flex jc="space-between" ai="end" mt="15px" pb={['10px', '15px']} px={['15px', '24px']}>
           <Controller
             name="type"
             control={control}
-            render={({ field: { onChange, value, ref } }) => (
-              <Button
-                ref={ref}
-                sx={{ mt: 'auto' }}
-                variant="outlined"
-                color={value === 'A' ? 'primary' : 'danger'}
-                onClick={() => onChange(value === 'A' ? 'B' : 'A')}>
-                <Typography level="h2" fontSize={14} color="inherit">
-                  Type {value}
-                </Typography>
-              </Button>
+            render={({ field }) => (
+              <OrderTypeChip
+                type={field.value}
+                onClick={() => field.onChange(field.value === 'A' ? 'B' : 'A')}
+              />
             )}
           />
 
-          <Flex aiCenter gap="10px" mt="15px">
+          <Flex aiCenter gap="10px">
             <Button variant="plain" color="neutral" onClick={handlePrint}>
               <Print />
             </Button>
-            <Button type="submit">Submit</Button>
-            <Button variant="plain" color="neutral" onClick={onCancel}>
-              Cancel
+
+            <Button type="submit" startDecorator={loading && <CircularProgress />} disabled={loading}>
+              Submit
+            </Button>
+            <Button sx={{ p: '5px' }} variant="plain" color="neutral" onClick={onCancel}>
+              <Close />
             </Button>
           </Flex>
         </Flex>

@@ -4,8 +4,8 @@ import App from './App.jsx';
 import { CssVarsProvider } from '@mui/joy';
 import theme from 'theme/index.js';
 import { BrowserRouter } from 'react-router-dom';
-import { AppProvider } from 'contexts/AppState.context.jsx';
-import { AuthProvider } from 'contexts/useAuth/Auth.context.jsx';
+import { AppProvider } from 'contexts/AppContext.jsx';
+import { AuthProvider } from 'contexts/AuthContext.jsx';
 // import { AuthProvider } from "./contexts/useAuth/Auth.context.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useApp } from 'contexts/AppState.context.jsx';
+import { useApp } from 'contexts';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import Flex from 'components/basic-components/Flex';
 import { CircularProgress } from '@mui/joy';
-import { auth, db } from '../../firebase/firebase.config';
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
+import { auth, db } from 'firebase-local';
+
 const AuthContext = createContext();
-
 export const useAuth = () => useContext(AuthContext);
-const googleProvider = new GoogleAuthProvider();
 
+const googleProvider = new GoogleAuthProvider();
 export const AuthProvider = ({ children }) => {
   const { appLoading, setAppLoading, userAgent, setLoginError } = useApp();
   const [user, setUser] = useState(null);
@@ -31,36 +31,42 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  const addUserToFirestore = async (user) => {
-    const userRef = doc(db, 'users', user.email);
-    const docSnap = await getDoc(userRef);
+  useEffect(() => {
+    if (user) {
+      const unsub = onSnapshot(doc(db, 'users', user?.email), (doc) => {
+        setUser({ ...user, access: doc?.data()?.access });
+      });
+      return unsub;
+    }
+  }, [user?.access]);
 
-    if (!docSnap.exists()) {
-      const { displayName, email, photoURL, uid } = user;
-      const createdAt = serverTimestamp();
-      try {
-        await setDoc(userRef, {
-          displayName,
-          email,
-          photoURL,
-          createdAt,
-          uid,
+  const setUserData = async (user) => {
+    const ref = doc(db, 'users', user.email);
+    const docSnap = await getDoc(ref);
+
+    try {
+      if (!docSnap.exists()) {
+        await setDoc(ref, {
           access: false,
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          provider: 'Google',
+          role: '',
         });
-      } catch (error) {
-        console.log(error);
       }
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const signInWithGoogle = async () => {
+  const signOut = async (callback) => {
     setAppLoading(true);
     try {
-      const { user } = await signInFunc(auth, googleProvider);
-      const userRef = doc(db, 'users', user.email);
-      const docSnap = await getDoc(userRef);
-      !docSnap.exists() && addUserToFirestore(user);
-      return user;
+      await auth.signOut();
+      setLoginError(null);
+      callback();
     } catch (error) {
       console.log(error);
     } finally {
@@ -68,11 +74,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signOut = async () => {
+  const signInWithGoogle = async (callback) => {
     setAppLoading(true);
     try {
-      await auth.signOut();
-      setLoginError(null);
+      const res = await signInFunc(auth, googleProvider);
+      const user = res.user;
+      setUserData(user);
+      callback(user);
+      setAppLoading(false);
     } catch (error) {
       console.log(error);
     } finally {
