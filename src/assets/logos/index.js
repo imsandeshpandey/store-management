@@ -1,1 +1,1 @@
-export { Logo } from 'assets/logos/Logo';
+export { Logo } from './Logo';
